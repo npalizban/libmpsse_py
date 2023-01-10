@@ -20,10 +20,10 @@ spi.getNumChannels()
 
 spi.openChannel(chn_no = 0)
 
-spi.closeChannel()
-
 spi.initChannel(clk=1000000, latency=1, config=SPI.SPI_CONFIG_OPTION_CS_ACTIVELOW)
 
 write_buffer = [0x80, 0x29] # list of bytes to transfer on MOSI, MSB first
 
 read_buffer = spi.readWrite(write_buffer) # returns read data from MISO
+
+spi.closeChannel()
