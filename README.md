@@ -7,12 +7,11 @@ User guide: https://ftdichip.com/wp-content/uploads/2020/08/AN_178_User-Guide-fo
 Also check: https://ftdichip.com/software-examples/mpsse-projects/libmpsse-spi-examples/
 
 # Limitation
-Supports windows only.
 Supports SPI interface only.
 
 # Dependencies
-Need to download libmpsse.dll from FTDI site and copy it at C:\Windows\System32\libmpsse.dll
-Or change the dll_path variable and point to right location.
+On windows, need to download libmpsse.dll from FTDI site and copy it at C:\Windows\System32\libmpsse.dll.
+If dll is not in this directory or using different platforms, change the dll_path variable inside libmpsse_py.dl and point to right location.
 
 # Usage example
 
