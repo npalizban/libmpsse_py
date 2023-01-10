@@ -1,6 +1,6 @@
 # libmpsse_py
-Tiny python wrapper around libmpsse.dll provided by FTDI.
-It is tried to be very similar to actual FTDI document "AN_178 user guid for libmpsse SPI"
+Tiny python wrapper for libmpsse.dll provided by FTDI.
+It is tried to provide very similar interface as actual FTDI "AN_178 user guid for libmpsse SPI" document.
 
 User guide: https://ftdichip.com/wp-content/uploads/2020/08/AN_178_User-Guide-for-LibMPSSE-SPI-1.pdf
 
