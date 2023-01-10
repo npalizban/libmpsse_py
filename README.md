@@ -2,6 +2,10 @@
 Tiny python wrapper around libmpsse.dll provided by FTDI.
 It is tried to be very similar to actual FTDI document "AN_178 user guid for libmpsse SPI"
 
+User guide: https://ftdichip.com/wp-content/uploads/2020/08/AN_178_User-Guide-for-LibMPSSE-SPI-1.pdf
+
+Also check: https://ftdichip.com/software-examples/mpsse-projects/libmpsse-spi-examples/
+
 # Limitation
 Supports windows only.
 Supports SPI interface only.
@@ -22,7 +26,7 @@ spi.openChannel(chn_no = 0)
 
 spi.initChannel(clk=1000000, latency=1, config=SPI.SPI_CONFIG_OPTION_CS_ACTIVELOW)
 
-write_buffer = [0x80, 0x29] # list of bytes to transfer on MOSI, MSB first
+write_buffer = [0x80, 0x29] # list of bytes to transfer on MOSI. Big endian MSB first.
 
 read_buffer = spi.readWrite(write_buffer) # returns read data from MISO
 
