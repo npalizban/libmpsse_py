@@ -1,13 +1,14 @@
 # libmpsse_py
 Tiny python wrapper around libmpsse.dll provided by FTDI.
-Interface is tried to be very similar to actual FTDI document "AN_178 user guid for libmpsse SPI"
+It is tried to be very similar to actual FTDI document "AN_178 user guid for libmpsse SPI"
 
 # Limitation
 Supports windows only.
-Supports SPI interface only for now.
+Supports SPI interface only.
 
 # Dependencies
 Need to download libmpsse.dll from FTDI site and copy it at C:\Windows\System32\libmpsse.dll
+Or change the dll_path variable and point to right location.
 
 # Usage example
 
