@@ -1,6 +1,6 @@
 import ctypes
 
-dll_path = r'C:\Windows\System32\libmpsse.dll'
+dll = ctypes.cdll.LoadLibrary(r'C:\Windows\System32\libmpsse.dll')
 
 class SPI:
 
@@ -36,28 +36,23 @@ class SPI:
     class SpiError(Exception):
         pass
 
-    def __init__(self):
-        self.dll = None
-        self.handle = ctypes.c_void_p()
-        try:
-            self.dll = ctypes.cdll.LoadLibrary(dll_path)
-        except:
-            pass
-
-        if self.dll is None: raise SPI.SpiError("Error: Could not open libmpsse.dll at %s" % dll_path)
-
-
-    def getNumChannels(self):
+    @staticmethod
+    def getNumChannels():
         chn_count = ctypes.c_uint32()
-        self.dll.SPI_GetNumChannels(ctypes.byref(chn_count))
+        ret = dll.SPI_GetNumChannels(ctypes.byref(chn_count))
+        if ret: raise SPI.SpiError("Error: getNumChannels ret=%d" % ret)
         return chn_count.value
 
-    def openChannel(self, chn_no = 0):
-        ret = self.dll.SPI_OpenChannel(chn_no, ctypes.byref(self.handle))
+    def __init__(self, chn_no):
+        self.handle = ctypes.c_void_p()
+        self.chn_no = chn_no
+
+    def openChannel(self):
+        ret = dll.SPI_OpenChannel(self.chn_no, ctypes.byref(self.handle))
         if ret: raise SPI.SpiError("Error: Could not open channel %d ret=%d" % (chn_no, ret))
 
     def closeChannel(self):
-        ret = self.dll.SPI_CloseChannel(self.handle)
+        ret = dll.SPI_CloseChannel(self.handle)
         if ret: raise SPI.SpiError("Error: Could not close channel ret=%d" % ret)
 
     def initChannel(self, clk,
@@ -66,7 +61,7 @@ class SPI:
                     pins=0xffffffff):
 
         chn_conf = SPI.ChannelConfig(clk, latency, config, pins, 0xff)
-        ret = self.dll.SPI_InitChannel(self.handle, ctypes.byref(chn_conf))
+        ret = dll.SPI_InitChannel(self.handle, ctypes.byref(chn_conf))
         if ret: raise SPI.SpiError("Error: could not initialize channel ret=%d" % ret)
 
     def readWrite(self, write_buffer, size_bytes = None, options = SPI_TRANSFER_OPTIONS_DEFAULT):
@@ -84,7 +79,7 @@ class SPI:
 
         size_transfered = ctypes.c_uint32()
 
-        ret = self.dll.SPI_ReadWrite(
+        ret = dll.SPI_ReadWrite(
                 self.handle,
                 in_buffer,
                 out_buffer,
@@ -103,10 +98,12 @@ class SPI:
         return [ord(in_buffer[i]) for i in range(size_bytes)]
 
 if __name__ == '__main__':
-    spi = SPI()
-    print(spi.getNumChannels())
 
-    spi.openChannel(0)
+    print(SPI.getNumChannels())
+
+    spi = SPI(chn_no = 0)
+
+    spi.openChannel()
 
     spi.initChannel(clk = 1000000)
 
