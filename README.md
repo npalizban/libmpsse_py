@@ -30,7 +30,7 @@ spi.openChannel()
 
 spi.initChannel(clk = 1000000)
 
-read = spi.readWrite(write)
+read = spi.readWrite([0x80 0x29])
 
 spi.closeChannel()
 
