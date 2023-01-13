@@ -9,7 +9,9 @@ Also check: https://ftdichip.com/software-examples/mpsse-projects/libmpsse-spi-e
 
 # Limitation
 SPI Tested only with FTDI 2232H on windows platform.
-I2C is not tested and no supported yet.
+
+I2C is not tested and not supported yet.
+
 Does not have GPIO functions.
 
 # Dependencies
