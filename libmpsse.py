@@ -57,7 +57,7 @@ class SPI:
     def getChannelInfo(chn_no):
         dev_info = DeviceInfo()
         ret = dll.SPI_GetChannelInfo(chn_no, ctypes.byref(dev_info))
-        if ret: raise I2C.I2cError("Error: getChannelInfo ret=%d" % ret)
+        if ret: raise SPI.SpiError("Error: getChannelInfo ret=%d" % ret)
 
         chn_info = {
             'Flags': dev_info.Flags,
@@ -267,10 +267,10 @@ if __name__ == '__main__':
     num_channels = SPI.getNumChannels()
     print("num_channels = %d" % num_channels)
 
-    channel_info = [SPI.getChannelInfo(chn_no) for chn_no in range(num_channels)]
-    for chn in channel_info: print(chn)
-
     if num_channels:
+
+        channel_info = [SPI.getChannelInfo(chn_no) for chn_no in range(num_channels)]
+        for chn in channel_info: print(chn)
 
         spi = SPI(chn_no = 0)
 
@@ -290,10 +290,10 @@ if __name__ == '__main__':
     num_channels = I2C.getNumChannels()
     print("num_channels = %d" % num_channels)
 
-    channel_info = [I2C.getChannelInfo(chn_no) for chn_no in range(num_channels)]
-    for chn in channel_info: print(chn)
-
     if num_channels:
+
+        channel_info = [I2C.getChannelInfo(chn_no) for chn_no in range(num_channels)]
+        for chn in channel_info: print(chn)
 
         i2c = I2C(chn_no = 0)
         i2c.openChannel()
