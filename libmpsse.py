@@ -115,7 +115,7 @@ class SPI:
                 options
         )
 
-        if ret: raise SPI.SpiErrir("Error: read write failed ret=%d" % ret)
+        if ret: raise SPI.SpiError("Error: read write failed ret=%d" % ret)
 
         if size_transfered.value != size_to_transfer.value:
             raise SPI.SpiError("Error: transfer=%d != transferred=%d",
