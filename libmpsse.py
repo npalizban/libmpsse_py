@@ -91,6 +91,64 @@ class SPI:
         ret = dll.SPI_InitChannel(self.handle, ctypes.byref(chn_conf))
         if ret: raise SPI.SpiError("Error: could not initialize channel ret=%d" % ret)
 
+    def write(self, write_buffer, size_bytes = None, options = SPI_TRANSFER_OPTIONS_DEFAULT):
+
+        if size_bytes == None: size_bytes = len(write_buffer)
+
+        buffer = ctypes.create_string_buffer(size_bytes)
+
+        for i in range(size_bytes):
+            buffer[i] = write_buffer[i]
+
+        size_to_transfer = ctypes.c_uint32()
+        size_to_transfer.value = size_bytes
+
+        size_transfered = ctypes.c_uint32()
+
+        ret = dll.SPI_Write(
+                self.handle,
+                buffer,
+                size_to_transfer,
+                ctypes.byref(size_transfered),
+                options
+        )
+
+        if ret: raise SPI.SpiError("Error: read write failed ret=%d" % ret)
+
+        if size_transfered.value != size_to_transfer.value:
+            raise SPI.SpiError("Error: transfer=%d != transferred=%d",
+                               size_to_transfer.value,
+                               size_transfered.value)
+
+    def read(self, size_bytes, options = SPI_TRANSFER_OPTIONS_DEFAULT):
+
+        if size_bytes == None: size_bytes = len(write_buffer)
+
+        buffer = ctypes.create_string_buffer(size_bytes)
+
+        size_to_transfer = ctypes.c_uint32()
+        size_to_transfer.value = size_bytes
+
+        size_transfered = ctypes.c_uint32()
+
+        ret = dll.SPI_Read(
+                self.handle,
+                buffer,
+                size_to_transfer,
+                ctypes.byref(size_transfered),
+                options
+        )
+
+        if ret: raise SPI.SpiError("Error: read write failed ret=%d" % ret)
+
+        if size_transfered.value != size_to_transfer.value:
+            raise SPI.SpiError("Error: transfer=%d != transferred=%d",
+                               size_to_transfer.value,
+                               size_transfered.value)
+
+        return [ord(buffer[i]) for i in range(size_bytes)]
+
+
     def readWrite(self, write_buffer, size_bytes = None, options = SPI_TRANSFER_OPTIONS_DEFAULT):
 
         if size_bytes == None: size_bytes = len(write_buffer)
@@ -278,10 +336,12 @@ if __name__ == '__main__':
 
         spi.initChannel(clk = 1000000)
 
-        write = [0x80, 0x29]
+        write = [0x80, 0x00]
+
         print("write %02x-%02x" % (write[0], write[1]))
 
         read = spi.readWrite(write)
+
         print("read  %02x-%02x" % (read[0], read[1]))
 
         spi.closeChannel()
@@ -299,3 +359,4 @@ if __name__ == '__main__':
         i2c.openChannel()
         i2c.initChannel(clk = I2C.I2C_CLOCK_STANDARD_MODE)
         i2c.closeChannel()
+
